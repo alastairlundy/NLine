@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLine.Cli", "NLine.Cli\NLine.Cli.csproj", "{AA6DBCFB-605D-41AE-8EE9-6AE4EDBFA165}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NLine.Library", "NLine.Library\NLine.Library.csproj", "{A0D6502C-2200-40B5-9BA3-9B62E6529E47}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AA6DBCFB-605D-41AE-8EE9-6AE4EDBFA165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA6DBCFB-605D-41AE-8EE9-6AE4EDBFA165}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA6DBCFB-605D-41AE-8EE9-6AE4EDBFA165}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA6DBCFB-605D-41AE-8EE9-6AE4EDBFA165}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0D6502C-2200-40B5-9BA3-9B62E6529E47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0D6502C-2200-40B5-9BA3-9B62E6529E47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0D6502C-2200-40B5-9BA3-9B62E6529E47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0D6502C-2200-40B5-9BA3-9B62E6529E47}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
