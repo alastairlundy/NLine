@@ -34,10 +34,4 @@
       <ProjectReference Include="..\NLine.Library\NLine.Library.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="..\..\LICENSE.txt">
-        <Link>LICENSE.txt</Link>
-      </Content>
-    </ItemGroup>
-
 </Project>
