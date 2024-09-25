@@ -24,8 +24,10 @@ using System.Linq;
 using CliUtilsLib;
 
 using NLine.Cli.Localizations;
+
 using NLine.Library;
 using NLine.Library.Abstractions;
+
 using Spectre.Console;
 using Spectre.Console.Cli;
 
