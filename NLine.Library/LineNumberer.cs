@@ -21,16 +21,25 @@ using System.Text;
 
 using AlastairLundy.Extensions.System;
 
+using NLine.Library.Abstractions;
+
 namespace NLine.Library;
 
-public static class LineNumberer
+public class LineNumberer : ILineNumberer
 {
-    internal static int CalculateLineNumber(int currentIndex, int lineIncrementor, int initialLineNumber)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="currentIndex"></param>
+    /// <param name="lineIncrementor"></param>
+    /// <param name="initialLineNumber"></param>
+    /// <returns></returns>
+    public int CalculateNextLineNumber(int currentIndex, int lineIncrementor, int initialLineNumber)
     {
         return currentIndex == 0 ? initialLineNumber : initialLineNumber * ((currentIndex + 1) * lineIncrementor);
     }
 
-    internal static string AddColumns(int columnNumber)
+    protected string AddColumns(int columnNumber)
     {
         StringBuilder stringBuilder = new StringBuilder();
         
@@ -50,7 +59,7 @@ public static class LineNumberer
         }
     }
 
-    internal static string AddLeadingZeroes(int lineNumberDigits)
+    protected string AddLeadingZeroes(int lineNumberDigits)
     {
         StringBuilder stringBuilder = new StringBuilder();
         
@@ -69,7 +78,7 @@ public static class LineNumberer
         return string.Empty;
     }
 
-    internal static bool NextXLinesIsEmpty(int numberOfLines, int currentIndex, string[] lines)
+    protected bool NextXLinesIsEmpty(int numberOfLines, int currentIndex, string[] lines)
     {
         if (lines[currentIndex].Equals(string.Empty))
         {
@@ -99,7 +108,7 @@ public static class LineNumberer
         return false;
     }
 
-    internal static string AddTabSpacesIfNeeded(bool addTabSpaces, string line)
+    protected string AddTabSpacesIfNeeded(bool addTabSpaces, string line)
     {
         if (addTabSpaces)
         {
@@ -111,7 +120,7 @@ public static class LineNumberer
         }
     }
 
-    internal static string ConstructLine(int lineNumber, int columnNumber, string line, string lineNumberAppendedText, bool addTabSpaces, bool addLeadingZeroes)
+    protected string ConstructLine(int lineNumber, int columnNumber, string line, string lineNumberAppendedText, bool addTabSpaces, bool addLeadingZeroes)
     {
         StringBuilder stringBuilder = new StringBuilder();
         
@@ -136,7 +145,7 @@ public static class LineNumberer
     /// <param name="lines">The lines to be numbered.</param>
     /// <param name="lineNumberAppendedText">The string to follow the line number. If you want nothing to be appended use string.Empty</param>
     /// <returns>a new IEnumerable containing the contents of the provided IEnumerable with line numbering added to it.</returns>
-    public static IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, string lineNumberAppendedText)
+    public IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, string lineNumberAppendedText)
     {
         return AddLineNumbers(lines, 1, 1, lineNumberAppendedText, true, 0, 4, false, false, null);
     }
@@ -155,7 +164,7 @@ public static class LineNumberer
     /// <param name="addLeadingZeroes">Whether to add leading zeroes to the line number.</param>
     /// <param name="listNumbersWithString">An optional parameter to allow for only numbering lines with a specified string.</param>
     /// <returns></returns>
-    public static IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, int lineIncrementor, int initialLineNumber, string lineNumberAppendedText, bool assignEmptyLinesANumber, int numberOfEmptyLinesToGroupTogether, int columnNumber, bool tabSpaceAfterLineNumber, bool addLeadingZeroes, string? listNumbersWithString = null)
+    public IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, int lineIncrementor, int initialLineNumber, string lineNumberAppendedText, bool assignEmptyLinesANumber, int numberOfEmptyLinesToGroupTogether, int columnNumber, bool tabSpaceAfterLineNumber, bool addLeadingZeroes, string? listNumbersWithString = null)
     {
         List<string> list = new List<string>();
         
@@ -165,7 +174,7 @@ public static class LineNumberer
         {
             string line = enumerable[index];
 
-            int lineNumber = CalculateLineNumber(index, lineIncrementor, initialLineNumber);
+            int lineNumber = CalculateNextLineNumber(index, lineIncrementor, initialLineNumber);
             
             if ((!assignEmptyLinesANumber && !line.Equals(string.Empty) && listNumbersWithString == null) ||
                 (listNumbersWithString != null && line.Contains(listNumbersWithString)) ||

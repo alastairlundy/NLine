@@ -25,7 +25,7 @@ using CliUtilsLib;
 
 using NLine.Cli.Localizations;
 using NLine.Library;
-
+using NLine.Library.Abstractions;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -141,8 +141,10 @@ public class LineNumberingCommand : Command<LineNumberingCommand.Settings>
         {
             stringAppender = settings.AppendLineNumber;
         }
+
+        ILineNumberer lineNumberer = new LineNumberer();
         
-        string[] results = LineNumberer.AddLineNumbers(input, settings.LineIncrementor, settings.LineStartingNumber,
+        string[] results = lineNumberer.AddLineNumbers(input, settings.LineIncrementor, settings.LineStartingNumber,
             stringAppender, assignEmptyLinesNumbers, settings.GroupOfEmptyLinesCountedAsOne, columnNumbers, tabSpaceAfterLineNumber, addLeadingZeroes, searchString).ToArray();
 
         if (settings.OutputFile != null)
