@@ -11,13 +11,21 @@
         <Title>NLine.Library</Title>
         <Description>A library to assist in adding line numbers to files and parsing file names in string arrays.</Description>
         <Copyright>Copyright (c) Alastair Lundy 2024</Copyright>
-        <RepositoryUrl>https://github.com/alastairlundy/BasisBox/</RepositoryUrl>
+        <RepositoryUrl>https://github.com/BasisBox/NLine</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
+        <PackageReleaseNotes>## Changes since NLine 1.0.0
+
+### NLine CLI
+* Initial Release of NLine CLI
+
+### NLine Library
+* Added ``ILineNumberer`` 
+* Re-structured ``LineNumberer`` to no longer be static and use ``ILineNumberer``
+* Made ``CalculateNextLineNumber`` public</PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-        <FileVersion>1.0.0.0</FileVersion>
-        <PackageVersion>1.0.0</PackageVersion>
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <FileVersion>2.0.0.0</FileVersion>
+        <PackageVersion>2.0.0</PackageVersion>
         
     </PropertyGroup>
 
@@ -28,6 +36,15 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="LICENSE.txt">
+            <Link>LICENSE.txt</Link>
+            <PackagePath>LICENSE.txt</PackagePath>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
 
     <ItemGroup>
       <PackageReference Include="AlastairLundy.Extensions.System" Version="5.*" />
