@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
@@ -13,19 +12,13 @@
         <Copyright>Copyright (c) Alastair Lundy 2024</Copyright>
         <RepositoryUrl>https://github.com/BasisBox/NLine</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageReleaseNotes>## Changes since NLine 1.0.0
-
-### NLine CLI
-* Initial Release of NLine CLI
-
-### NLine Library
-* Added ``ILineNumberer`` 
-* Re-structured ``LineNumberer`` to no longer be static and use ``ILineNumberer``
-* Made ``CalculateNextLineNumber`` public</PackageReleaseNotes>
+        <PackageReleaseNotes>## Changes since NLine 2.0.0
+* Add support for .NET 6</PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <FileVersion>2.0.0.0</FileVersion>
-        <PackageVersion>2.0.0</PackageVersion>
+        <PackageVersion>2.0.1</PackageVersion>
+        <TargetFrameworks>net8.0;net6.0</TargetFrameworks>
         
     </PropertyGroup>
 
