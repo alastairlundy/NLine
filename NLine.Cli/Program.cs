@@ -15,10 +15,6 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System.Reflection;
-
-using AlastairLundy.Extensions.System;
-
 using NLine.Cli.Commands;
 using NLine.Cli.Localizations;
 
@@ -34,8 +30,7 @@ commandApp.Configure(config =>
         .WithExample("-v 0")
         .WithExample("-w 5");
 
-    config.SetApplicationVersion(Assembly.GetExecutingAssembly().GetName().Version.ToFriendlyVersionString());
-
+    config.UseAssemblyInformationalVersion();
 });
 
 commandApp.SetDefaultCommand<LineNumberingCommand>();
