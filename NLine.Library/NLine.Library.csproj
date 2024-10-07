@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <ImplicitUsings>disable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <Nullable>disable</Nullable>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -12,13 +12,13 @@
         <Copyright>Copyright (c) Alastair Lundy 2024</Copyright>
         <RepositoryUrl>https://github.com/BasisBox/NLine</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageReleaseNotes>## Changes since NLine 2.0.0
-* Add support for .NET 6</PackageReleaseNotes>
+        <PackageReleaseNotes>## Changes since NLine 2.0.1
+* Replace explicit .NET 6 support with .NET Standard 2.0 and 2.1 support</PackageReleaseNotes>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <AssemblyVersion>2.0.0.0</AssemblyVersion>
         <FileVersion>2.0.0.0</FileVersion>
-        <PackageVersion>2.0.1</PackageVersion>
-        <TargetFrameworks>net8.0;net6.0</TargetFrameworks>
+        <PackageVersion>2.0.2</PackageVersion>
+        <TargetFrameworks>net8.0;netstandard2.1;netstandard2.0</TargetFrameworks>
         
     </PropertyGroup>
 

@@ -23,192 +23,214 @@ using AlastairLundy.Extensions.System;
 
 using NLine.Library.Abstractions;
 
-namespace NLine.Library;
-
-public class LineNumberer : ILineNumberer
+namespace NLine.Library
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="currentIndex"></param>
-    /// <param name="lineIncrementor"></param>
-    /// <param name="initialLineNumber"></param>
-    /// <returns></returns>
-    public int CalculateNextLineNumber(int currentIndex, int lineIncrementor, int initialLineNumber)
+    public class LineNumberer : ILineNumberer
     {
-        return currentIndex == 0 ? initialLineNumber : initialLineNumber * ((currentIndex + 1) * lineIncrementor);
-    }
-
-    protected string AddColumns(int columnNumber)
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        
-        if (columnNumber > 0)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentIndex"></param>
+        /// <param name="lineIncrementor"></param>
+        /// <param name="initialLineNumber"></param>
+        /// <returns></returns>
+        public int CalculateNextLineNumber(int currentIndex, int lineIncrementor, int initialLineNumber)
         {
-            for (int column = 1; column <= columnNumber; column++)
+            return currentIndex == 0 ? initialLineNumber : initialLineNumber * ((currentIndex + 1) * lineIncrementor);
+        }
+
+        protected string AddColumns(int columnNumber)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+        
+            if (columnNumber > 0)
             {
-                stringBuilder.Append(' ');
+                for (int column = 1; column <= columnNumber; column++)
+                {
+                    stringBuilder.Append(' ');
+                }
+
+                return stringBuilder.ToString();
+            }
+            // ReSharper disable once RedundantIfElseBlock
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        protected string AddLeadingZeroes(int lineNumberDigits)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+        
+            int zeroesToAdd = 5 - lineNumberDigits;
+
+            if (zeroesToAdd > 0)
+            {
+                for (int zero = 0; zero < zeroesToAdd; zero++)
+                {
+                    stringBuilder.Append('0');
+                }
+
+                return stringBuilder.ToString();
             }
 
-            return stringBuilder.ToString();
-        }
-        // ReSharper disable once RedundantIfElseBlock
-        else
-        {
             return string.Empty;
         }
-    }
 
-    protected string AddLeadingZeroes(int lineNumberDigits)
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        
-        int zeroesToAdd = 5 - lineNumberDigits;
-
-        if (zeroesToAdd > 0)
+        protected bool NextXLinesIsEmpty(int numberOfLines, int currentIndex, string[] lines)
         {
-            for (int zero = 0; zero < zeroesToAdd; zero++)
+            if (lines[currentIndex].Equals(string.Empty))
             {
-                stringBuilder.Append('0');
+                bool[] checkedLines = new bool[numberOfLines];
+            
+                bool linesChecked = false;
+                int internalIndex = 1;
+            
+                while (!linesChecked)
+                {
+                    int lineToBeChecked = currentIndex + internalIndex;
+                    // ReSharper disable once ArrangeRedundantParentheses
+                    if ((lines.Length > lineToBeChecked) && lineToBeChecked <= numberOfLines)
+                    {
+                        checkedLines[lineToBeChecked] = lines[lineToBeChecked] == string.Empty;
+                    }
+
+                    if (lineToBeChecked > numberOfLines)
+                    {
+                        linesChecked = true;
+                    }
+                }
+
+                return checkedLines.IsAllTrue();
             }
+
+            return false;
+        }
+
+        protected string AddTabSpacesIfNeeded(bool addTabSpaces, string line)
+        {
+            if (addTabSpaces)
+            {
+                return $"\t {line}";
+            }
+            else
+            {
+                return line;
+            }
+        }
+
+        protected string ConstructLine(int lineNumber, int columnNumber, string line, string lineNumberAppendedText, bool addTabSpaces, bool addLeadingZeroes)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+        
+            stringBuilder.Append(AddColumns(columnNumber));
+
+            if (addLeadingZeroes)
+            {
+                stringBuilder.Append(AddLeadingZeroes(lineNumber.ToString().Length));
+            }
+            
+            stringBuilder.Append(lineNumber);
+            stringBuilder.Append(lineNumberAppendedText);
+
+            stringBuilder.Append(AddTabSpacesIfNeeded(addTabSpaces, line));
 
             return stringBuilder.ToString();
         }
 
-        return string.Empty;
-    }
-
-    protected bool NextXLinesIsEmpty(int numberOfLines, int currentIndex, string[] lines)
-    {
-        if (lines[currentIndex].Equals(string.Empty))
+        /// <summary>
+        /// The simple line numbering method which uses default settings to add line numbers to an IEnumerable of type String.
+        /// </summary>
+        /// <param name="lines">The lines to be numbered.</param>
+        /// <param name="lineNumberAppendedText">The string to follow the line number. If you want nothing to be appended use string.Empty</param>
+        /// <returns>a new IEnumerable containing the contents of the provided IEnumerable with line numbering added to it.</returns>
+        public IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, string lineNumberAppendedText)
         {
-            bool[] checkedLines = new bool[numberOfLines];
-            
-            bool linesChecked = false;
-            int internalIndex = 1;
-            
-            while (!linesChecked)
-            {
-                int lineToBeChecked = currentIndex + internalIndex;
-                // ReSharper disable once ArrangeRedundantParentheses
-                if ((lines.Length > lineToBeChecked) && lineToBeChecked <= numberOfLines)
-                {
-                    checkedLines[lineToBeChecked] = lines[lineToBeChecked] == string.Empty;
-                }
-
-                if (lineToBeChecked > numberOfLines)
-                {
-                    linesChecked = true;
-                }
-            }
-
-            return checkedLines.IsAllTrue();
+            return AddLineNumbers(lines, 1, 1, lineNumberAppendedText, true, 0, 4, false, false, null);
         }
-
-        return false;
-    }
-
-    protected string AddTabSpacesIfNeeded(bool addTabSpaces, string line)
-    {
-        if (addTabSpaces)
-        {
-            return $"\t {line}";
-        }
-        else
-        {
-            return line;
-        }
-    }
-
-    protected string ConstructLine(int lineNumber, int columnNumber, string line, string lineNumberAppendedText, bool addTabSpaces, bool addLeadingZeroes)
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        
-        stringBuilder.Append(AddColumns(columnNumber));
-
-        if (addLeadingZeroes)
-        {
-            stringBuilder.Append(AddLeadingZeroes(lineNumber.ToString().Length));
-        }
-            
-        stringBuilder.Append(lineNumber);
-        stringBuilder.Append(lineNumberAppendedText);
-
-        stringBuilder.Append(AddTabSpacesIfNeeded(addTabSpaces, line));
-
-        return stringBuilder.ToString();
-    }
-
-    /// <summary>
-    /// The simple line numbering method which uses default settings to add line numbers to an IEnumerable of type String.
-    /// </summary>
-    /// <param name="lines">The lines to be numbered.</param>
-    /// <param name="lineNumberAppendedText">The string to follow the line number. If you want nothing to be appended use string.Empty</param>
-    /// <returns>a new IEnumerable containing the contents of the provided IEnumerable with line numbering added to it.</returns>
-    public IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, string lineNumberAppendedText)
-    {
-        return AddLineNumbers(lines, 1, 1, lineNumberAppendedText, true, 0, 4, false, false, null);
-    }
     
-    /// <summary>
-    /// The advanced line numbering method with many customization options.
-    /// </summary>
-    /// <param name="lines">The lines to be numbered.</param>
-    /// <param name="lineIncrementor">The amount to increase each line number by.</param>
-    /// <param name="initialLineNumber">The initial number to use as a line number.</param>
-    /// <param name="lineNumberAppendedText">The text to append to the line number. If you want nothing to be appended use string.Empty</param>
-    /// <param name="assignEmptyLinesANumber">Whether to assign a line number to empty lines.</param>
-    /// <param name="numberOfEmptyLinesToGroupTogether">The number of consecutive empty lines to be given a line number.</param>
-    /// <param name="columnNumber">The column to use for the line number.</param>
-    /// <param name="tabSpaceAfterLineNumber">The amount of tab spaces after the line number and before the line contents.</param>
-    /// <param name="addLeadingZeroes">Whether to add leading zeroes to the line number.</param>
-    /// <param name="listNumbersWithString">An optional parameter to allow for only numbering lines with a specified string.</param>
-    /// <returns></returns>
-    public IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, int lineIncrementor, int initialLineNumber, string lineNumberAppendedText, bool assignEmptyLinesANumber, int numberOfEmptyLinesToGroupTogether, int columnNumber, bool tabSpaceAfterLineNumber, bool addLeadingZeroes, string? listNumbersWithString = null)
-    {
-        List<string> list = new List<string>();
         
-        string[] enumerable = lines as string[] ?? lines.ToArray();
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+        #nullable enable
         
-        for(int index = 0; index < enumerable.Length; index++)
+        /// <summary>
+        /// The advanced line numbering method with many customization options.
+        /// </summary>
+        /// <param name="lines">The lines to be numbered.</param>
+        /// <param name="lineIncrementor">The amount to increase each line number by.</param>
+        /// <param name="initialLineNumber">The initial number to use as a line number.</param>
+        /// <param name="lineNumberAppendedText">The text to append to the line number. If you want nothing to be appended use string.Empty</param>
+        /// <param name="assignEmptyLinesANumber">Whether to assign a line number to empty lines.</param>
+        /// <param name="numberOfEmptyLinesToGroupTogether">The number of consecutive empty lines to be given a line number.</param>
+        /// <param name="columnNumber">The column to use for the line number.</param>
+        /// <param name="tabSpaceAfterLineNumber">The amount of tab spaces after the line number and before the line contents.</param>
+        /// <param name="addLeadingZeroes">Whether to add leading zeroes to the line number.</param>
+        /// <param name="listNumbersWithString">An optional parameter to allow for only numbering lines with a specified string.</param>
+        /// <returns></returns>
+        public IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, int lineIncrementor, int initialLineNumber, string lineNumberAppendedText, bool assignEmptyLinesANumber, int numberOfEmptyLinesToGroupTogether, int columnNumber, bool tabSpaceAfterLineNumber, bool addLeadingZeroes, string? listNumbersWithString = null)
+#else
+        /// <summary>
+        /// The advanced line numbering method with many customization options.
+        /// </summary>
+        /// <param name="lines">The lines to be numbered.</param>
+        /// <param name="lineIncrementor">The amount to increase each line number by.</param>
+        /// <param name="initialLineNumber">The initial number to use as a line number.</param>
+        /// <param name="lineNumberAppendedText">The text to append to the line number. If you want nothing to be appended use string.Empty</param>
+        /// <param name="assignEmptyLinesANumber">Whether to assign a line number to empty lines.</param>
+        /// <param name="numberOfEmptyLinesToGroupTogether">The number of consecutive empty lines to be given a line number.</param>
+        /// <param name="columnNumber">The column to use for the line number.</param>
+        /// <param name="tabSpaceAfterLineNumber">The amount of tab spaces after the line number and before the line contents.</param>
+        /// <param name="addLeadingZeroes">Whether to add leading zeroes to the line number.</param>
+        /// <param name="listNumbersWithString">An optional parameter to allow for only numbering lines with a specified string.</param>
+        /// <returns></returns>
+        public IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, int lineIncrementor, int initialLineNumber, string lineNumberAppendedText, bool assignEmptyLinesANumber, int numberOfEmptyLinesToGroupTogether, int columnNumber, bool tabSpaceAfterLineNumber, bool addLeadingZeroes, string listNumbersWithString = null)
+#endif
         {
-            string line = enumerable[index];
-
-            int lineNumber = CalculateNextLineNumber(index, lineIncrementor, initialLineNumber);
-            
-            if ((!assignEmptyLinesANumber && !line.Equals(string.Empty) && listNumbersWithString == null) ||
-                (listNumbersWithString != null && line.Contains(listNumbersWithString)) ||
-                (assignEmptyLinesANumber && line.Equals(string.Empty)))
+            List<string> list = new List<string>();
+        
+            string[] enumerable = lines as string[] ?? lines.ToArray();
+        
+            for(int index = 0; index < enumerable.Length; index++)
             {
-                if (line.Equals(string.Empty) && NextXLinesIsEmpty(numberOfEmptyLinesToGroupTogether, index, enumerable) && assignEmptyLinesANumber)
-                {
-                    if (numberOfEmptyLinesToGroupTogether > 1)
-                    {
-                        for (int emptyLine = 0; emptyLine < numberOfEmptyLinesToGroupTogether % 2; emptyLine++)
-                        {
-                            list.Add(string.Empty);
-                        }
-                   
-                        list.Add(ConstructLine(lineNumber, columnNumber, line, lineNumberAppendedText,
-                            tabSpaceAfterLineNumber, addLeadingZeroes));
-                   
-                        for (int emptyLine = 0; emptyLine < numberOfEmptyLinesToGroupTogether % 2; emptyLine++)
-                        {
-                            list.Add(string.Empty);
-                        }
-                        
-                        index += numberOfEmptyLinesToGroupTogether - 1;
-                    }
-                    else
-                    {
-                        list.Add(ConstructLine(lineNumber, columnNumber, line, lineNumberAppendedText, tabSpaceAfterLineNumber, addLeadingZeroes));
-                    }
-                }
-                
-                list.Add(ConstructLine(lineNumber, columnNumber, line, lineNumberAppendedText, tabSpaceAfterLineNumber, addLeadingZeroes));
-            }
-        }
+                string line = enumerable[index];
 
-        return list.ToArray();
+                int lineNumber = CalculateNextLineNumber(index, lineIncrementor, initialLineNumber);
+            
+                if ((!assignEmptyLinesANumber && !line.Equals(string.Empty) && listNumbersWithString == null) ||
+                    (listNumbersWithString != null && line.Contains(listNumbersWithString)) ||
+                    (assignEmptyLinesANumber && line.Equals(string.Empty)))
+                {
+                    if (line.Equals(string.Empty) && NextXLinesIsEmpty(numberOfEmptyLinesToGroupTogether, index, enumerable) && assignEmptyLinesANumber)
+                    {
+                        if (numberOfEmptyLinesToGroupTogether > 1)
+                        {
+                            for (int emptyLine = 0; emptyLine < numberOfEmptyLinesToGroupTogether % 2; emptyLine++)
+                            {
+                                list.Add(string.Empty);
+                            }
+                   
+                            list.Add(ConstructLine(lineNumber, columnNumber, line, lineNumberAppendedText,
+                                tabSpaceAfterLineNumber, addLeadingZeroes));
+                   
+                            for (int emptyLine = 0; emptyLine < numberOfEmptyLinesToGroupTogether % 2; emptyLine++)
+                            {
+                                list.Add(string.Empty);
+                            }
+                        
+                            index += numberOfEmptyLinesToGroupTogether - 1;
+                        }
+                        else
+                        {
+                            list.Add(ConstructLine(lineNumber, columnNumber, line, lineNumberAppendedText, tabSpaceAfterLineNumber, addLeadingZeroes));
+                        }
+                    }
+                
+                    list.Add(ConstructLine(lineNumber, columnNumber, line, lineNumberAppendedText, tabSpaceAfterLineNumber, addLeadingZeroes));
+                }
+            }
+
+            return list.ToArray();
+        }
     }
 }

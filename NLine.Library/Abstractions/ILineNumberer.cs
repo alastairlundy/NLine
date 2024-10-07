@@ -17,16 +17,24 @@
 
 using System.Collections.Generic;
 
-namespace NLine.Library.Abstractions;
-
-public interface ILineNumberer
+namespace NLine.Library.Abstractions
 {
-    public int CalculateNextLineNumber(int currentIndex, int lineIncrementor, int initialLineNumber);
-    
-    public IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, string lineNumberAppendedText);
+    public interface ILineNumberer
+    { 
+        int CalculateNextLineNumber(int currentIndex, int lineIncrementor, int initialLineNumber);
+        
+        IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, string lineNumberAppendedText);
 
-    public IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, int lineIncrementor, int initialLineNumber,
-        string lineNumberAppendedText, bool assignEmptyLinesANumber, int numberOfEmptyLinesToGroupTogether,
-        int columnNumber, bool tabSpaceAfterLineNumber, bool addLeadingZeroes, string? listNumbersWithString = null);
-
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+        #nullable enable
+        
+        IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, int lineIncrementor, int initialLineNumber,
+            string lineNumberAppendedText, bool assignEmptyLinesANumber, int numberOfEmptyLinesToGroupTogether,
+            int columnNumber, bool tabSpaceAfterLineNumber, bool addLeadingZeroes, string? listNumbersWithString = null);
+#else
+        IEnumerable<string> AddLineNumbers(IEnumerable<string> lines, int lineIncrementor, int initialLineNumber,
+            string lineNumberAppendedText, bool assignEmptyLinesANumber, int numberOfEmptyLinesToGroupTogether,
+            int columnNumber, bool tabSpaceAfterLineNumber, bool addLeadingZeroes, string listNumbersWithString = null);
+#endif
+    }
 }
