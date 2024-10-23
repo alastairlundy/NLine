@@ -10,19 +10,12 @@ As a general policy, where possible:
 
 No guarantee of support is provided and updates containing fixes are to be made on a best effort basis.
 
-### NLine CLI
-
-| Version | Supported with Bug Fixes | Supported with Security Fixes |
-| ------- | ------------------ |-------------------------------------|
-| 2.1.0 | :white_check_mark: | :white_check_mark: | 
-| 2.0.0 | :white_check_mark:, until November 25th 2024 | :white_check_mark:, until November 25th 2024 | 
-
 ### NLine Library
 
 | Version | Supported with Bug Fixes | Supported with Security Fixes |
 | ------- | ------------------ |-------------------------------------|
-| 2.0     | :white_check_mark: | :white_check_mark: | 
-| 1.0     | :white_check_mark:, until October 27th 2024 | :white_check_mark:, October 27th 2024 | 
+| 2.0.x     | :white_check_mark: | :white_check_mark: | 
+| 1.0.x     | :white_check_mark:, until October 27th 2024 | :white_check_mark:, October 27th 2024 | 
 
 ## Security Vulnerabilities
 Where it is possible to report a security vulnerability privately within the github page of one of my projects, please use this approach.
